@@ -18,12 +18,17 @@ class ListCountriesViewController: UIViewController {
         super.viewDidLoad()
         searchBar.delegate = self
         setupTableView()
+        viewModel?.fetchCountries()
     }
     
     private func setupTableView() {
         listTableView.register(UINib(nibName: "CountryTableViewCell", bundle: nil), forCellReuseIdentifier: "CountryTableViewCell")
         listTableView.delegate = self
         listTableView.dataSource = self
+    }
+
+    deinit {
+        viewModel?.countries?.unbind(self)
     }
 }
 
@@ -33,14 +38,16 @@ extension ListCountriesViewController: UISearchBarDelegate {
 
 extension ListCountriesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return viewModel?.countries?.value.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CountryTableViewCell") as? CountryTableViewCell  else {
             return UITableViewCell()
         }
-        cell.configure(title: "TEST", subTitle: "SUB TITLE TEST")
+        let title = "\(viewModel?.countries?.value[indexPath.row].name ?? ""), \(viewModel?.countries?.value[indexPath.row].country ?? "")"
+        let subTitle = "\(viewModel?.countries?.value[indexPath.row].coord.lat ?? 0.0), \(viewModel?.countries?.value[indexPath.row].coord.lon ?? 0.0)"
+        cell.configure(title: title, subTitle: subTitle)
         return cell
     }
     

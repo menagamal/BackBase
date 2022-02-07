@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 
 class ListCountriesViewModel {
     
@@ -23,4 +24,21 @@ class ListCountriesViewModel {
         }
     }
     
+    func didSelectCountryWithIndex(index: Int) {
+        if let model = countries?.value[index] {
+            let latitude: CLLocationDegrees = model.coord.lat
+            let longitude: CLLocationDegrees = model.coord.lon
+            let regionDistance:CLLocationDistance = 10000
+            let coordinates = CLLocationCoordinate2DMake(latitude, longitude)
+            let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
+            let options = [
+                MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center),
+                MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)
+            ]
+            let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+            let mapItem = MKMapItem(placemark: placemark)
+            mapItem.name = model.name
+            mapItem.openInMaps(launchOptions: options)
+        }
+    }
 }

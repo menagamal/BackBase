@@ -50,5 +50,7 @@ extension ListCountriesViewController: UITableViewDataSource, UITableViewDelegat
         cell.configure(title: title, subTitle: subTitle)
         return cell
     }
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel?.didSelectCountryWithIndex(index: indexPath.row)
+    }
 }

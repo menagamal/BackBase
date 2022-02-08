@@ -18,6 +18,9 @@ class ListCountriesViewController: UIViewController {
         super.viewDidLoad()
         searchBar.delegate = self
         setupTableView()
+        viewModel?.countries?.bindAndFire(self, { _ in
+            self.listTableView.reloadData()
+        })
         viewModel?.fetchCountries()
     }
     
@@ -33,7 +36,9 @@ class ListCountriesViewController: UIViewController {
 }
 
 extension ListCountriesViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {}
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel?.search(str: searchText)
+    }
 }
 
 extension ListCountriesViewController: UITableViewDataSource, UITableViewDelegate {

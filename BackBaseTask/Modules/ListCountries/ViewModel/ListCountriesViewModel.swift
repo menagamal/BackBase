@@ -8,11 +8,26 @@
 import Foundation
 import MapKit
 
-class ListCountriesViewModel {
+protocol ListCountriesViewModel: AnyObject {
+    var countries: MultipleBinding<[CountryModel]>? { get set }
+    func didSelectCountryWithIndex(index: Int)
+    func search(str: String)
+    func fetchCountries()
+}
+class ListCountriesViewModelImp: ListCountriesViewModel {
     
     var countries: MultipleBinding<[CountryModel]>? = MultipleBinding([CountryModel]())
-    var allCountries: MultipleBinding<[CountryModel]>? = MultipleBinding([CountryModel]())
     
+    private var allCountries: MultipleBinding<[CountryModel]>? = MultipleBinding([CountryModel]())
+    
+    private var savedFilters: [String.Element: [CountryModel]] = [:]
+    
+    private var router: ListRouter?
+
+    init(router: ListRouter) {
+        self.router = router
+    }
+
     func fetchCountries() {
         if let path = Bundle.main.path(forResource: "cities", ofType: "json") {
             do {
@@ -23,26 +38,14 @@ class ListCountriesViewModel {
                 self.countries?.value = sortedCountries
                 self.allCountries?.value = sortedCountries
             } catch {
-                // handle error
+                // handle errorx
             }
         }
     }
     
     func didSelectCountryWithIndex(index: Int) {
         if let model = countries?.value[index] {
-            let latitude: CLLocationDegrees = model.coord.lat
-            let longitude: CLLocationDegrees = model.coord.lon
-            let regionDistance:CLLocationDistance = 10000
-            let coordinates = CLLocationCoordinate2DMake(latitude, longitude)
-            let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
-            let options = [
-                MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center),
-                MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)
-            ]
-            let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
-            let mapItem = MKMapItem(placemark: placemark)
-            mapItem.name = model.name
-            mapItem.openInMaps(launchOptions: options)
+            router?.present(to: .openMap(latitude: model.coord.lat, longitude: model.coord.lon, name: model.name))
         }
     }
     
@@ -53,20 +56,20 @@ class ListCountriesViewModel {
             }
             return
         }
-        let rangedValues = BINARY_SEARCH_COUNTRIES(str: str)
+        let rangedValues = BINARY_SEARCH_COUNTRIES(str: str, allCountries: allCountries?.value ?? [])
         countries?.value = SEARCH_SUB_ARRAY(str: str, rangedArray: rangedValues)
     }
 }
 
-private extension ListCountriesViewModel {
+extension ListCountriesViewModelImp {
     
-    func BINARY_SEARCH_COUNTRIES(str: String) -> [CountryModel] {
-        guard let allCountries = allCountries?.value else {
-             return []
-        }
+    func BINARY_SEARCH_COUNTRIES(str: String, allCountries: [CountryModel]) -> [CountryModel] {
         var lowerIndex = 0
         var upperIndex = allCountries.count - 1
         let searchKey = str.first!
+        if let savedResult = savedFilters[searchKey] {
+            return savedResult
+        }
         var didFoundTheRange = false
         var result = [CountryModel]()
         while (lowerIndex < upperIndex && !didFoundTheRange) {
@@ -84,6 +87,7 @@ private extension ListCountriesViewModel {
             }
         }
         result = Array(allCountries[lowerIndex...upperIndex])
+        savedFilters[searchKey] = result
         return result
     }
     

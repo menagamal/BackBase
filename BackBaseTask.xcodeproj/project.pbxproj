@@ -24,6 +24,8 @@
 		D097FA4E27B094B400C3AB8F /* CountryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D097FA4C27B094B400C3AB8F /* CountryTableViewCell.xib */; };
 		D097FA5327B0983700C3AB8F /* Bindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D097FA5227B0983700C3AB8F /* Bindable.swift */; };
 		D097FA5527B0A69300C3AB8F /* cities.json in Resources */ = {isa = PBXBuildFile; fileRef = D097FA5427B0A69300C3AB8F /* cities.json */; };
+		D0D947C827B5C4460026958D /* ListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D947C727B5C4460026958D /* ListRouter.swift */; };
+		D0D947CA27B5CF640026958D /* ListRouterMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D947C927B5CF640026958D /* ListRouterMocks.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,8 @@
 		D097FA4C27B094B400C3AB8F /* CountryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryTableViewCell.xib; sourceTree = "<group>"; };
 		D097FA5227B0983700C3AB8F /* Bindable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bindable.swift; sourceTree = "<group>"; };
 		D097FA5427B0A69300C3AB8F /* cities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cities.json; sourceTree = "<group>"; };
+		D0D947C727B5C4460026958D /* ListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRouter.swift; sourceTree = "<group>"; };
+		D0D947C927B5CF640026958D /* ListRouterMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRouterMocks.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				D097FA2027B08A5E00C3AB8F /* BackBaseTaskTests.swift */,
+				D0D947C927B5CF640026958D /* ListRouterMocks.swift */,
 			);
 			path = BackBaseTaskTests;
 			sourceTree = "<group>";
@@ -182,6 +187,7 @@
 		D097FA4327B08E4E00C3AB8F /* ListCountries */ = {
 			isa = PBXGroup;
 			children = (
+				D0D947C627B5C4390026958D /* Router */,
 				D097FA4527B08E6100C3AB8F /* Builder */,
 				D097FA3C27B08C1C00C3AB8F /* View */,
 				D097FA3B27B08C1700C3AB8F /* ViewModel */,
@@ -213,6 +219,14 @@
 				D097FA5227B0983700C3AB8F /* Bindable.swift */,
 			);
 			path = Bindable;
+			sourceTree = "<group>";
+		};
+		D0D947C627B5C4390026958D /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				D0D947C727B5C4460026958D /* ListRouter.swift */,
+			);
+			path = Router;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -356,6 +370,7 @@
 				D097FA4027B08DF900C3AB8F /* CountryModel.swift in Sources */,
 				D097FA4727B08E6C00C3AB8F /* ListCountriesBuilder.swift in Sources */,
 				D097FA4227B08E1900C3AB8F /* ListCountriesViewModel.swift in Sources */,
+				D0D947C827B5C4460026958D /* ListRouter.swift in Sources */,
 				D097FA5327B0983700C3AB8F /* Bindable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -364,6 +379,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0D947CA27B5CF640026958D /* ListRouterMocks.swift in Sources */,
 				D097FA2127B08A5E00C3AB8F /* BackBaseTaskTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

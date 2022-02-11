@@ -10,24 +10,39 @@ import XCTest
 
 class BackBaseTaskTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    var listViewModel: ListCountriesViewModelImp {
+        return ListCountriesViewModelImp(router: router)
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
+    lazy var router = ListRouterMocks()
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testJsonFile() {
+        if let _ =  Bundle.main.path(forResource: "cities", ofType: "json") {
+            listViewModel.fetchCountries()
+            XCTAssertNotNil(listViewModel.countries)
+        } else {
+            XCTFail("JSON FILE NOT FOUND")
         }
+    }
+
+    func testBinarySearch() {
+        let result = listViewModel.BINARY_SEARCH_COUNTRIES(str: "H", allCountries: constructTestData())
+        XCTAssertEqual(result.count, 3)
+        
+        for item in result {
+            if item.name.first != "H" {
+                XCTFail("ERROR IN BINARY SEARCH")
+            }
+        }
+    }
+    
+    private func constructTestData() -> [CountryModel] {
+        var arr = [CountryModel]()
+        let cities = ["Amsterdam", "Boston", "Chicago", "City", "Corona", "Gastonia", "Hampton", "Hello", "Hollywood", "Json", "Las Vegas"]
+        for item in cities {
+            arr.append(CountryModel(country: item, name: item, id: 0, coord: Coord(lon: 0, lat: 0)))
+        }
+        return arr
     }
 
 }

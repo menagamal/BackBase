@@ -18,8 +18,11 @@ class ListCountriesViewController: UIViewController {
         super.viewDidLoad()
         searchBar.delegate = self
         setupTableView()
-        viewModel?.countries?.bindAndFire(self, { _ in
-            self.listTableView.reloadData()
+        viewModel?.countries?.bindAndFire(self, { [weak self] _ in
+            self?.listTableView.reloadData()
+        })
+        viewModel?.genericError?.bindAndFire(self, { [weak self] message in
+            self?.showErrorMessage(message: message)
         })
         viewModel?.fetchCountries()
     }
@@ -28,6 +31,12 @@ class ListCountriesViewController: UIViewController {
         listTableView.register(UINib(nibName: "CountryTableViewCell", bundle: nil), forCellReuseIdentifier: "CountryTableViewCell")
         listTableView.delegate = self
         listTableView.dataSource = self
+    }
+
+    private func showErrorMessage(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 
     deinit {
@@ -59,3 +68,4 @@ extension ListCountriesViewController: UITableViewDataSource, UITableViewDelegat
         viewModel?.didSelectCountryWithIndex(index: indexPath.row)
     }
 }
+

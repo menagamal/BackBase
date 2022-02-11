@@ -10,11 +10,14 @@ import MapKit
 
 protocol ListCountriesViewModel: AnyObject {
     var countries: MultipleBinding<[CountryModel]>? { get set }
+    var genericError: MultipleBinding<String>? { get set }
     func didSelectCountryWithIndex(index: Int)
     func search(str: String)
     func fetchCountries()
 }
 class ListCountriesViewModelImp: ListCountriesViewModel {
+    
+    var genericError: MultipleBinding<String>?
     
     var countries: MultipleBinding<[CountryModel]>? = MultipleBinding([CountryModel]())
     
@@ -38,7 +41,7 @@ class ListCountriesViewModelImp: ListCountriesViewModel {
                 self.countries?.value = sortedCountries
                 self.allCountries?.value = sortedCountries
             } catch {
-                // handle errorx
+                self.genericError?.value = "Could not find the list of countries" 
             }
         }
     }
